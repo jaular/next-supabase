@@ -4,6 +4,8 @@ import { Container } from "components";
 import { createClient } from "@supabase/supabase-js";
 import { ImageProps } from "lib/types";
 
+import type { ParsedUrlQuery } from "querystring";
+
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || "",
   process.env.SUPABASE_SERVICE_ROLE_KEY || ""
@@ -12,6 +14,10 @@ const supabaseAdmin = createClient(
 type Props = {
   image: ImageProps;
 };
+
+interface Query extends ParsedUrlQuery {
+  id: string;
+}
 
 const ImagePage: NextPage<Props> = ({ image }) => {
   return (
@@ -44,9 +50,15 @@ const ImagePage: NextPage<Props> = ({ image }) => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths = async () => {
+  const { data } = await supabaseAdmin.from("images").select("*").order("id");
+
+  const paths = data?.map((item) => ({
+    params: { id: item.id },
+  }));
+
   return {
-    paths: [{ params: { id: "1" } }, { params: { id: "2" } }],
+    paths,
     fallback: "blocking",
   };
 };

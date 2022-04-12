@@ -1,5 +1,6 @@
 export type ImageProps = {
-  id: number;
+  id: string;
+  created_at: string;
   href: string;
   imageSrc: string;
   name: string;
