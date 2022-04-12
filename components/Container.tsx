@@ -31,11 +31,11 @@ export const Container = (props: Props) => {
         <meta content={meta.description} name="description" />
         <meta
           property="og:url"
-          content={`http://localhost:3000${meta.currentPage}`}
+          content={`https://next-supabase-gallery.vercel.app${meta.currentPage}`}
         />
         <link
           rel="canonical"
-          href={`http://localhost:3000${meta.currentPage}`}
+          href={`https://next-supabase-gallery.vercel.app${meta.currentPage}`}
         />
         <meta property="og:type" content={meta.type} />
         <meta property="og:site_name" content="Next" />
