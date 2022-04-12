@@ -24,13 +24,10 @@ export default async function handler(
 
   try {
     const {
-      body: { type, id },
+      body: { type, slug },
     } = req;
-
     await res.unstable_revalidate(`/`);
-    await res.unstable_revalidate(`/image/${id}`);
-    return res.json({ message: `Revalidated "${type}" with slug "${id}"` });
-
+    await res.unstable_revalidate(`/image/${slug}`);
     return res.json({ revalidated: true });
   } catch (err) {
     return res.status(500).send({ message: "Error revalidating" });
