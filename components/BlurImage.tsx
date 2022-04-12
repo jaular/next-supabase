@@ -7,6 +7,14 @@ function cn(...classes: string[]) {
   return classes.filter(Boolean).join("");
 }
 
+async function handleClick(id: string) {
+  const response = await fetch("/api/revalidate", {
+    method: "POST",
+    body: JSON.stringify(id),
+  });
+  await response.json();
+}
+
 type Props = {
   image: ImageProps;
 };
@@ -19,7 +27,7 @@ export const BlurImage = ({ image }: Props) => {
   return (
     <>
       <Link href={`/image/${id}`}>
-        <a className="group">
+        <a className="group" onClick={() => handleClick(id)}>
           <div className="w-full overflow-hidden bg-gray-200 rounded-lg aspect-w-1 aspect-h-1">
             <Image
               alt={username}

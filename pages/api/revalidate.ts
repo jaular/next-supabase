@@ -9,33 +9,12 @@ export default async function handler(
     return res.status(401).json({ message: "Invalid token" });
   }
 
-  // try {
-  //   // Regenerate our index route showing the images
-  //   await res.unstable_revalidate("/");
-  //   await res.unstable_revalidate(
-  //     "/image/bf79509e-40ae-4965-848a-d26102ae01ad"
-  //   );
-  //   return res.json({ revalidated: true });
-  // } catch (err) {
-  //   // If there was an error, Next.js will continue
-  //   // to show the last successfully generated page
-  //   return res.status(500).send("Error revalidating");
-  // }
-
   try {
-    // check that body is not empty
-    const body = req.body;
-    if (!body) {
-      res.status(400).send("Bad request (no body)");
-      return;
-    }
-
-    // get the slug to revalidate from body
-    const slugToRevalidate = body.slugToRevalidate;
-    if (slugToRevalidate) {
-      await res.unstable_revalidate(`/image/${slugToRevalidate}`);
-      return res.json({ revalidated: true });
-    }
+    // Regenerate our index route showing the images
+    const data = JSON.parse(req.body);
+    await res.unstable_revalidate("/");
+    await res.unstable_revalidate("/image/" + data);
+    return res.json({ revalidated: true });
   } catch (err) {
     // If there was an error, Next.js will continue
     // to show the last successfully generated page
