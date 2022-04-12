@@ -12,7 +12,9 @@ export default async function handler(
   try {
     // Regenerate our index route showing the images
     await res.unstable_revalidate("/");
-    await res.unstable_revalidate("/image/" + req.body.id);
+    await res.unstable_revalidate(
+      "/image/bf79509e-40ae-4965-848a-d26102ae01ad"
+    );
     return res.json({ revalidated: true });
   } catch (err) {
     // If there was an error, Next.js will continue
