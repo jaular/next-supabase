@@ -23,13 +23,22 @@ export default async function handler(
   // }
 
   try {
-    const {
-      body: { type, slug },
-    } = req;
-    await res.unstable_revalidate(`/`);
-    await res.unstable_revalidate(`/image/${slug}`);
-    return res.json({ revalidated: true });
+    // check that body is not empty
+    const body = req.body;
+    if (!body) {
+      res.status(400).send("Bad request (no body)");
+      return;
+    }
+
+    // get the slug to revalidate from body
+    const slugToRevalidate = body.slugToRevalidate;
+    if (slugToRevalidate) {
+      await res.unstable_revalidate(`/image/${slugToRevalidate}`);
+      return res.json({ revalidated: true });
+    }
   } catch (err) {
-    return res.status(500).send({ message: "Error revalidating" });
+    // If there was an error, Next.js will continue
+    // to show the last successfully generated page
+    return res.status(500).send("Error revalidating");
   }
 }
