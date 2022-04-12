@@ -9,16 +9,33 @@ export default async function handler(
     return res.status(401).json({ message: "Invalid token" });
   }
 
+  // try {
+  //   // Regenerate our index route showing the images
+  //   await res.unstable_revalidate("/");
+  //   await res.unstable_revalidate(
+  //     "/image/bf79509e-40ae-4965-848a-d26102ae01ad"
+  //   );
+  //   return res.json({ revalidated: true });
+  // } catch (err) {
+  //   // If there was an error, Next.js will continue
+  //   // to show the last successfully generated page
+  //   return res.status(500).send("Error revalidating");
+  // }
+
   try {
-    // Regenerate our index route showing the images
-    await res.unstable_revalidate("/");
-    await res.unstable_revalidate(
-      "/image/bf79509e-40ae-4965-848a-d26102ae01ad"
-    );
-    return res.json({ revalidated: true });
+    const {
+      body: { type, id },
+    } = req;
+
+    switch (type) {
+      case "post":
+        await res.unstable_revalidate(`/`);
+        await res.unstable_revalidate(`/image/${id}`);
+        return res.json({ message: `Revalidated "${type}" with slug "${id}"` });
+    }
+
+    return res.json({ message: "No managed type" });
   } catch (err) {
-    // If there was an error, Next.js will continue
-    // to show the last successfully generated page
-    return res.status(500).send("Error revalidating");
+    return res.status(500).send({ message: "Error revalidating" });
   }
 }
