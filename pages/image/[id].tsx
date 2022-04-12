@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { NextPage, GetServerSideProps } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import { Container } from "components";
 import { createClient } from "@supabase/supabase-js";
 import { ImageProps } from "lib/types";
@@ -44,7 +44,22 @@ const ImagePage: NextPage<Props> = ({ image }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export default ImagePage;
+
+export const getStaticPaths = async () => {
+  const { data } = await supabaseAdmin.from("images").select("*").order("id");
+
+  const paths = data?.map((item) => ({
+    params: { id: item.id },
+  }));
+
+  return {
+    paths,
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id = "" } = params as { id: string };
 
   const { data } = await supabaseAdmin
@@ -69,5 +84,3 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     },
   };
 };
-
-export default ImagePage;
