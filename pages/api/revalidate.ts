@@ -11,9 +11,7 @@ export default async function handler(
 
   try {
     // Regenerate our index route showing the images
-    const data = JSON.parse(req.body);
     await res.unstable_revalidate("/");
-    await res.unstable_revalidate("/image/" + data);
     return res.json({ revalidated: true });
   } catch (err) {
     // If there was an error, Next.js will continue
