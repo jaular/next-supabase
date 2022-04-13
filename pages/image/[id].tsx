@@ -1,13 +1,8 @@
 import Link from "next/link";
-import type { GetStaticProps, NextPage } from "next";
-import { Container } from "components";
-import { createClient } from "@supabase/supabase-js";
+import type { GetServerSideProps, NextPage } from "next";
 import { ImageProps } from "lib/types";
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ""
-);
+import { Container } from "components";
+import { getImageById } from "lib/db";
 
 type Props = {
   image: ImageProps;
@@ -15,7 +10,7 @@ type Props = {
 
 const ImagePage: NextPage<Props> = ({ image }) => {
   return (
-    <Container title="Next.js with Supabase">
+    <Container title="Next.js | SSR">
       <div className="space-y-4">
         <h1 className="text-base text-gray-700">
           Photo by{" "}
@@ -46,30 +41,11 @@ const ImagePage: NextPage<Props> = ({ image }) => {
 
 export default ImagePage;
 
-export const getStaticPaths = async () => {
-  const { data } = await supabaseAdmin.from("images").select("*").order("id");
-
-  const paths = data?.map((item) => ({
-    params: { id: item.id },
-  }));
-
-  return {
-    paths,
-    fallback: "blocking",
-  };
-};
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { id = "" } = params as { id: string };
+  const result = await getImageById(id);
 
-  const { data } = await supabaseAdmin
-    .from("images")
-    .select("*")
-    .eq("id", `${id}`)
-    .limit(1)
-    .single();
-
-  if (!data) {
+  if (!result) {
     return {
       redirect: {
         destination: "/",
@@ -80,7 +56,48 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   return {
     props: {
-      image: data,
+      image: result,
     },
   };
 };
+
+// WIP
+
+// export const getStaticPaths = async () => {
+//   const { data } = await supabaseAdmin.from("images").select("*").order("id");
+
+//   const paths = data?.map((item) => ({
+//     params: { id: item.id },
+//   }));
+
+//   return {
+//     paths,
+//     fallback: "blocking",
+//   };
+// };
+
+// export const getStaticProps: GetStaticProps = async ({ params }) => {
+//   const { id = "" } = params as { id: string };
+
+//   const { data } = await supabaseAdmin
+//     .from("images")
+//     .select("*")
+//     .eq("id", `${id}`)
+//     .limit(1)
+//     .single();
+
+//   if (!data) {
+//     return {
+//       redirect: {
+//         destination: "/",
+//         permanent: false,
+//       },
+//     };
+//   }
+
+//   return {
+//     props: {
+//       image: data,
+//     },
+//   };
+// };

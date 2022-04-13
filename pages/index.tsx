@@ -1,7 +1,7 @@
 import type { GetStaticProps, NextPage } from "next";
 import type { ImageProps } from "lib/types";
 import { Container, Grid } from "components";
-import { createClient } from "@supabase/supabase-js";
+import { getAllImages } from "lib/db";
 
 type Props = {
   images: ImageProps[];
@@ -9,26 +9,19 @@ type Props = {
 
 const Home: NextPage<Props> = ({ images }) => {
   return (
-    <Container title="Next.js with Supabase">
+    <Container title="Next.js | On-demand ISR">
       <Grid images={images} />
     </Container>
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-    process.env.SUPABASE_SERVICE_ROLE_KEY || ""
-  );
-
-  const { data } = await supabaseAdmin
-    .from("images")
-    .select("*")
-    .order("created_at");
+export const getStaticProps: GetStaticProps = async () => {
+  // getStaticProps with On-demand ISR (Beta)
+  const result = await getAllImages();
 
   return {
     props: {
-      images: data,
+      images: result,
     },
   };
 };

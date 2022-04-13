@@ -11,7 +11,9 @@ export default async function handler(
 
   try {
     // Regenerate our index route showing the images
+    console.log("[Next.js] Revalidating /");
     await res.unstable_revalidate("/");
+
     return res.json({ revalidated: true });
   } catch (err) {
     // If there was an error, Next.js will continue
