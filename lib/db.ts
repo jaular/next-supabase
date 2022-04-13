@@ -8,7 +8,7 @@ const supabaseAdmin = createClient(
 
 export const getAllImages = async (): Promise<ImageProps[]> => {
   const { data } = await supabaseAdmin
-    .from("images")
+    .from<ImageProps>("images")
     .select("*")
     .order("created_at");
 
@@ -17,7 +17,7 @@ export const getAllImages = async (): Promise<ImageProps[]> => {
 
 export const getImageById = async (id: string): Promise<ImageProps | null> => {
   const { data } = await supabaseAdmin
-    .from("images")
+    .from<ImageProps>("images")
     .select("*")
     .eq("id", `${id}`)
     .limit(1)
