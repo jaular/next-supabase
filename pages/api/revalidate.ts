@@ -10,12 +10,10 @@ export default async function handler(
   // }
 
   try {
-    const slug = JSON.parse(req.body)?.parameters?.id;
-
-    if (slug) {
-      await res.unstable_revalidate(`/images/${slug}`);
+    const id = JSON.parse(req.body)?.parameters?.id;
+    if (id) {
+      await res.unstable_revalidate(`/image/${id}`);
     }
-
     // Regenerate our index route showing the images
     console.log("[Next.js] Revalidating /");
     await res.unstable_revalidate("/");
