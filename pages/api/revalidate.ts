@@ -5,11 +5,17 @@ export default async function handler(
   res: NextApiResponse
 ) {
   // Check for secret to confirm this is a valid request
-  if (req.query.secret !== process.env.REVALIDATE_SECRET) {
-    return res.status(401).json({ message: "Invalid token" });
-  }
+  // if (req.query.secret !== process.env.REVALIDATE_SECRET) {
+  //   return res.status(401).json({ message: "Invalid token" });
+  // }
 
   try {
+    const slug = JSON.parse(req.body)?.parameters?.id;
+
+    if (slug) {
+      await res.unstable_revalidate(`/images/${slug}`);
+    }
+
     // Regenerate our index route showing the images
     console.log("[Next.js] Revalidating /");
     await res.unstable_revalidate("/");
