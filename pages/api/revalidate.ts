@@ -4,18 +4,17 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const data = req.body.record;
+  const data = req.body;
   // Check for secret to confirm this is a valid request
   if (req.query.secret !== process.env.REVALIDATE_SECRET) {
     return res.status(401).json({ message: "Invalid token" });
   }
 
   try {
-    if (data) {
-      await res.unstable_revalidate(`/image/${data.id}`);
+    if (data.table === "images") {
+      await res.unstable_revalidate(`/image/${data.record.id}`);
     }
     // Regenerate our index route showing the images
-    console.log("[Next.js] Revalidating /");
     await res.unstable_revalidate("/");
 
     return res.json({ revalidated: true });
