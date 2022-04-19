@@ -1,8 +1,8 @@
 import Link from "next/link";
-import type { GetServerSideProps, NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import { ImageProps } from "lib/types";
 import { Container } from "components";
-import { getImageById } from "lib/db";
+import { getAllImagesId, getImageById } from "lib/db";
 
 type Props = {
   image: ImageProps;
@@ -10,7 +10,7 @@ type Props = {
 
 const ImagePage: NextPage<Props> = ({ image }) => {
   return (
-    <Container title="Next.js | SSR">
+    <Container title="Next.js | SSG">
       <div className="space-y-4">
         <h1 className="text-base text-gray-700">
           Photo by{" "}
@@ -41,7 +41,20 @@ const ImagePage: NextPage<Props> = ({ image }) => {
 
 export default ImagePage;
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getStaticPaths = async () => {
+  const result = await getAllImagesId();
+
+  const paths = result.map((item) => ({
+    params: { id: item.id },
+  }));
+
+  return {
+    paths,
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id = "" } = params as { id: string };
   const result = await getImageById(id);
 
@@ -61,32 +74,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   };
 };
 
-// WIP
+// SSR
 
-// export const getStaticPaths = async () => {
-//   const { data } = await supabaseAdmin.from("images").select("*").order("id");
-
-//   const paths = data?.map((item) => ({
-//     params: { id: item.id },
-//   }));
-
-//   return {
-//     paths,
-//     fallback: "blocking",
-//   };
-// };
-
-// export const getStaticProps: GetStaticProps = async ({ params }) => {
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 //   const { id = "" } = params as { id: string };
+//   const result = await getImageById(id);
 
-//   const { data } = await supabaseAdmin
-//     .from("images")
-//     .select("*")
-//     .eq("id", `${id}`)
-//     .limit(1)
-//     .single();
-
-//   if (!data) {
+//   if (!result) {
 //     return {
 //       redirect: {
 //         destination: "/",
@@ -97,7 +91,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
 //   return {
 //     props: {
-//       image: data,
+//       image: result,
 //     },
 //   };
 // };

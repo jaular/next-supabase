@@ -29,3 +29,9 @@ export const getImageById = async (id: string): Promise<ImageProps | null> => {
 
   return JSON.parse(JSON.stringify(data));
 };
+
+export const getAllImagesId = async (): Promise<ImageProps[]> => {
+  const { data } = await supabaseAdmin.from<ImageProps>("images").select("id");
+
+  return JSON.parse(JSON.stringify(data));
+};
