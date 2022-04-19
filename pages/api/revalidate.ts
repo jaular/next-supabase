@@ -4,7 +4,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  //For testing de webhooks https://pipedream.com/
+  //For testing webhooks https://pipedream.com/
 
   const data = req.body;
   // Check for secret to confirm this is a valid request
