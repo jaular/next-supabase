@@ -1,6 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-Lydia Hallie https://twitter.com/lydiahallie/status/1514608423416971282
+
+[https://twitter.com/lydiahallie/status/1514608423416971282](Lydia Hallie)
 
 ## Getting Started
 
