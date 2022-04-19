@@ -4,7 +4,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const data = req.body.record;
+  const data = req.body.old_record;
   // Check for secret to confirm this is a valid request
   // if (req.query.secret !== process.env.REVALIDATE_SECRET) {
   //   return res.status(401).json({ message: "Invalid token" });
