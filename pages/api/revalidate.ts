@@ -11,12 +11,14 @@ export default async function handler(
   // }
 
   try {
-    if (data) {
-      await res.unstable_revalidate(`/images/${data.id}`);
-    }
+    // if (data) {
+    //   await res.unstable_revalidate(`/images/${data.id}`);
+    // }
+
+    await res.unstable_revalidate(`/images/${data.id}`);
     // Regenerate our index route showing the images
-    console.log("[Next.js] Revalidating /");
-    await res.unstable_revalidate("/");
+    // console.log("[Next.js] Revalidating /");
+    // await res.unstable_revalidate("/");
 
     return res.json({ revalidated: true });
   } catch (err) {
