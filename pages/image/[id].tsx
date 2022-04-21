@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { GetStaticProps, NextPage } from "next";
-import { ImageProps } from "lib/types";
+import type { ImageProps } from "lib/types";
+import Link from "next/link";
 import { Container } from "components";
 import { getAllImagesId, getImageById } from "lib/db";
 

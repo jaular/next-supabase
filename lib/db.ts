@@ -1,5 +1,5 @@
+import type { ImageProps } from "lib/types";
 import { createClient } from "@supabase/supabase-js";
-import { ImageProps } from "lib/types";
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || "",

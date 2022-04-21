@@ -1,5 +1,5 @@
 import type { ImageProps } from "lib/types";
-import { BlurImage } from "./BlurImage";
+import { BlurImage } from "components";
 
 type Props = {
   images: ImageProps[];

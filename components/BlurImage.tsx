@@ -1,7 +1,7 @@
+import type { ImageProps } from "lib/types";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import type { ImageProps } from "lib/types";
 
 function cn(...classes: string[]) {
   return classes.filter(Boolean).join("");
