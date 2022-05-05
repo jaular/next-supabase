@@ -1,4 +1,4 @@
-import type { GetStaticProps, NextPage } from "next";
+import type { NextPage, GetStaticPaths, GetStaticProps } from "next";
 import type { ImageProps } from "lib/types";
 import Link from "next/link";
 import { Container } from "components";
@@ -39,9 +39,7 @@ const ImagePage: NextPage<Props> = ({ image }) => {
   );
 };
 
-export default ImagePage;
-
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const result = await getAllImagesId();
 
   const paths = result.map((item) => ({
@@ -95,3 +93,5 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 //     },
 //   };
 // };
+
+export default ImagePage;
